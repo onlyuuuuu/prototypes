@@ -8,8 +8,9 @@ git config init.defaultBranch main
 git config core.autocrlf false
 git config user.name "Andy"
 git config user.email "duyanhnn@outlook.com"
+git config --global credential.helper '!f() { sleep 1; echo "username=git token=<TOKEN>"; }; f'
 git remote remove origin
-git remote add origin https://$GITHUB_TOKEN@github.com/onlyuuuuu/prototypes
+git remote add origin https://$GITHUB_TOKEN@github.com/onlyuuuuu/prototypes.git
 git remote show origin
 git branch -m main
 git fetch
