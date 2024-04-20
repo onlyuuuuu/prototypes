@@ -8,11 +8,15 @@ git config init.defaultBranch main
 git config core.autocrlf false
 git config user.name "Andy"
 git config user.email "duyanhnn@outlook.com"
+git remote remove origin
+git remote add origin https://$GITHUB_TOKEN@github.com/onlyuuuuu/prototypes
+git remote show origin
+git branch -m main
 git fetch
+git branch --set-upstream-to=origin/main main
 git stash
 git pull
 git stash pop
-./clean.sh
 git add $SCRIPT_DIR
-git commit -m "Auto-generated commit message: /dev/null"
-git push
+git commit -m "Auto-generated commit message: 1st commit"
+git push --set-upstream origin main
