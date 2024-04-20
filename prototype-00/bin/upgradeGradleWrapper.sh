@@ -8,4 +8,6 @@ echo "Location of project [$PROJECT] is: $CODEBASE_BASEDIR"
 CODEBASE_PARENT_DIR=$(dirname $CODEBASE_BASEDIR)
 echo "Parent directory of project [$PROJECT] is: $CODEBASE_PARENT_DIR"
 
+cd $CODEBASE_BASEDIR
+
 ./gradlew wrapper --gradle-version latest

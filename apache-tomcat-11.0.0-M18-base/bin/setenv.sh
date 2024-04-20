@@ -23,8 +23,20 @@ echo "CATALINA_HOME: $CATALINA_HOME"
 CATALINA_OPTS="-Xms2048m -Xmx4096m -Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:1199"; export CATALINA_OPTS
 CATALINA_PID="$CATALINA_BASE/tomcat.pid"; export CATALINA_PID
 
-JAVA_HOME="/Users/$USER/Documents/Developments/jdk-21.0.2.jdk/Contents/Home"; export JAVA_HOME
-JRE_HOME="/Users/$USER/Documents/Developments/jdk-21.0.2.jdk/Contents/Home"; export JRE_HOME
-ANT_HOME="/Users/$USER/Documents/Developments/apache-ant-1.10.14"; export ANT_HOME
+CHOSEN_JAVA_VERSION=22.0.1
+CHOSEN_ANT_VERSION=1.10.14
+if [[ "$(uname)" == "Darwin"* ]]; then
+  JAVA_HOME="/Users/$USER/Documents/Developments/jdk-$CHOSEN_JAVA_VERSION.jdk/Contents/Home"; export JAVA_HOME
+  JRE_HOME="/Users/$USER/Documents/Developments/jdk-$CHOSEN_JAVA_VERSION.jdk/Contents/Home"; export JRE_HOME
+  ANT_HOME="/Users/$USER/Documents/Developments/apache-ant-$CHOSEN_ANT_VERSION"; export ANT_HOME
+elif [[ "$(uname)" == "MINGW64_NT"* ]]; then
+  JAVA_HOME="C:/dev/Java/jdk-$CHOSEN_JAVA_VERSION"; export JAVA_HOME
+  JRE_HOME="C:/dev/Java/jdk-$CHOSEN_JAVA_VERSION"; export JRE_HOME
+  ANT_HOME="C:/dev/apache-ant-$CHOSEN_ANT_VERSION"; export ANT_HOME
+else
+  JAVA_HOME="/dev/Java/jdk-$CHOSEN_JAVA_VERSION"; export JAVA_HOME
+  JRE_HOME="/dev/Java/jdk-$CHOSEN_JAVA_VERSION"; export JRE_HOME
+  ANT_HOME="/dev/apache-ant-$CHOSEN_ANT_VERSION"; export ANT_HOME
+fi
 
 JAVA_OPTS="-Xms2048m -Xmx4096m"; export JAVA_OPTS
