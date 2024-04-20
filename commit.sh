@@ -8,10 +8,12 @@ git config init.defaultBranch main
 git config core.autocrlf false
 git config user.name "Andy"
 git config user.email "duyanhnn@outlook.com"
-git remote remove origin &> /dev/null
-git remote add origin https://$GITHUB_TOKEN@github.com/onlyuuuuu/prototypes &> /dev/null
-git branch --set-upstream-to=origin/"$1" "$1" &> /dev/null
-git checkout "$1"
+git remote remove origin
+git remote add origin https://$GITHUB_TOKEN@github.com/onlyuuuuu/prototypes
+git remote show origin
+git branch -m main
+git fetch
+git branch --set-upstream-to=origin/main main
 git stash
 git pull
 git stash pop
