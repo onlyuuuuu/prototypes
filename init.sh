@@ -18,6 +18,7 @@ git branch --set-upstream-to=origin/main main
 git stash
 git pull
 git stash pop
+./clean.sh
 git add $SCRIPT_DIR
 git commit -m "Auto-generated commit message: 1st commit"
 git push --set-upstream origin main
