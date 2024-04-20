@@ -3,6 +3,7 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo "Location of [$(basename "${BASH_SOURCE[0]}")] is: $SCRIPT_DIR"
 
+git config pull.rebase true
 git config init.defaultBranch main
 git config core.autocrlf false
 git config user.name "Andy"
