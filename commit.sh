@@ -18,5 +18,5 @@ git stash
 git pull
 git stash pop
 git add $SCRIPT_DIR
-git commit -m "$2"
-git push --set-upstream origin main &> /dev/null
+git commit -m "$1"
+git push --set-upstream origin main
