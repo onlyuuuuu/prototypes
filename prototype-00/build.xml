@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="." default="jspc" basedir=".">
+  <basename property="ant.project.name"
+            file="${basedir}"/>
+  <property file="${properties.source}"/>
+  <import file="${catalina.home}/bin/catalina-tasks.xml"/>
+  <target name="jspc">
+    <jasper compile="false"
+            smapSuppressed="false"
+            smapDumped="true"
+            compilerSourceVM="${source.version}"
+            compilerTargetVM="${target.version}"
+            validateXml="false"
+            addWebXmlMappings="true"
+            webXmlInclude="${basedir}/src/main/webapp/WEB-INF/generated_web.xml"
+            uriroot="${basedir}/src/main/webapp"
+            outputDir="${basedir}/src/main/java"/>
+  </target>
+  <target name="jspcExplicit">
+    <classpath>
+      <fileset dir="${catalina.home}/lib" includes="*.jar"/>
+    </classpath>
+    <java classname="org.apache.jasper.JspC"
+          fork="true"
+          failonerror="true">
+    </java>
+    <jasper compile="false"
+            smapSuppressed="false"
+            smapDumped="true"
+            compilerSourceVM="${source.version}"
+            compilerTargetVM="${target.version}"
+            validateXml="false"
+            addWebXmlMappings="true"
+            webXmlInclude="${basedir}/src/main/webapp/WEB-INF/generated_web.xml"
+            uriroot="${basedir}/src/main/webapp"
+            outputDir="${basedir}/src/main/java"/>
+  </target>
+  <target name="clean">
+    <delete includeEmptyDirs="true">
+      <fileset dir="${basedir}/src/main/java/org/apache/jsp" includes="**/*"/>
+    </delete>
+  </target>
+</project>

@@ -1,0 +1,44 @@
+version: '3.8'
+
+networks:
+  ${NETWORK_NAME}:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.0.0/16
+
+volumes:
+  ${VOLUME_NAME}:
+    external: true
+
+services:
+  database:
+    container_name: ${CONTAINER_NAME}
+    hostname: ${CONTAINER_HOSTNAME}
+    image: ${REGISTRY_IMAGE}
+    env_file:
+      - .env
+    volumes:
+      - ${VOLUME_NAME}:/opt/oracle/oradata
+      - ./setup:/opt/oracle/scripts/setup
+      - ./startup:/opt/oracle/scripts/startup
+      - ./resources:${CONTAINER_RESOURCES_DIR}
+    networks:
+      ${NETWORK_NAME}:
+        ipv4_address: 10.0.0.2
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+        window: 120s
+      resources:
+        reservations:
+          cpus: '2'
+          memory: 2GB
+        limits:
+          cpus: '4'
+          memory: 4GB

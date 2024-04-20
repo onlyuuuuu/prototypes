@@ -1,0 +1,11 @@
+Remaining problems:
+
+    - web.xml is not reformatted
+    - injecting external lib at runtime is still not possible
+    - command outputs from shell scripts cannot be displayed via gradle tasks
+
+Todo task:
+
+    - Running Jasper JSP compilation task with pure Gradle
+    - Try compiling a JSP file with tag <include>, which references to another JSP file
+
