@@ -8,6 +8,7 @@ git config init.defaultBranch main
 git config core.autocrlf false
 git config user.name "Andy"
 git config user.email "duyanhnn@outlook.com"
+git remote remove origin &> /dev/null
 git remote add origin https://$GITHUB_TOKEN@github.com/onlyuuuuu/prototypes &> /dev/null
 git branch --set-upstream-to=origin/"$1" "$1" &> /dev/null
 git checkout "$1"
