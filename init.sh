@@ -6,9 +6,9 @@ echo "Location of [$(basename "${BASH_SOURCE[0]}")] is: $SCRIPT_DIR"
 git config pull.rebase true
 git config init.defaultBranch main
 git config core.autocrlf false
+git config push.autoSetupRemote true
 git config user.name "Andy"
 git config user.email "duyanhnn@outlook.com"
-git config --global credential.helper '!f() { sleep 1; echo "username=git token=<TOKEN>"; }; f'
 git remote remove origin
 git remote add origin https://$GITHUB_TOKEN@github.com/onlyuuuuu/prototypes.git
 git remote show origin

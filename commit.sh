@@ -6,6 +6,7 @@ echo "Location of [$(basename "${BASH_SOURCE[0]}")] is: $SCRIPT_DIR"
 git config pull.rebase true
 git config init.defaultBranch main
 git config core.autocrlf false
+git config push.autoSetupRemote true
 git config user.name "Andy"
 git config user.email "duyanhnn@outlook.com"
 git fetch
