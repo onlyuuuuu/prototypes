@@ -10,10 +10,12 @@ git config push.autoSetupRemote true
 git config user.name "Andy"
 git config user.email "duyanhnn@outlook.com"
 git fetch
-git stash
+[[ "$1" != "--no-stash" ]] && git stash
 git pull
-git stash pop
+[[ "$1" != "--no-stash" ]] && git stash pop
 ./clean.sh
 git add $SCRIPT_DIR
-git commit -m "Auto-generated commit message: /dev/null"
+commit_msg="Auto-generated commit message: /dev/null"
+[[ ! -z "$2" && "$2" != "" ]] && commit_msg="$2"
+git commit -m "$commit_msg"
 git push
