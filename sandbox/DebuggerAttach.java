@@ -49,13 +49,13 @@ public class DebuggerAttach
         try
         {
             virtualMachine = attachingConnector.attach(modifiedArguments);
-            System.out.println("\n============ INFO ============\n");
-            System.out.println("\nName: \n" + virtualMachine.name());
-            System.out.println("\nDescription: \n" + virtualMachine.description());
+            System.out.printf("\n============ INFO ============\n");
+            System.out.printf("\nName: \n" + virtualMachine.name() + "\n");
+            System.out.printf("\nDescription: \n" + virtualMachine.description() + "\n");
             // TODO: Test this against different JVM languages such as Kotlin, Groovy, Scala, Clojure, Jython, JRuby
-            System.out.println("\nDefault Stratum: \n" + virtualMachine.getDefaultStratum());
-            System.out.println();
-            System.out.println("\n============ INFO ============\n");
+            System.out.printf("\nDefault Stratum: \n" + virtualMachine.getDefaultStratum() + "\n");
+            System.out.printf("\n");
+            System.out.printf("\n============ INFO ============\n");
 
             // Eyes on target, please continue executions
             virtualMachine.resume();
@@ -63,7 +63,7 @@ public class DebuggerAttach
             int stop = 1;
             while (stop != 0)
             {
-                System.out.print("\nWhich line would you like to set a breakpoint (either 23 or 33 is recommended): ");
+                System.out.printf("\nWhich line would you like to set a breakpoint (either 23 or 33 is recommended): ");
                 int line = _SCANNER.nextInt();
 
                 EventRequestManager eventRequestManager = virtualMachine.eventRequestManager();
@@ -87,34 +87,34 @@ public class DebuggerAttach
 
                     for (Event event : events)
                     {
-                        System.out.print("\n");
-                        System.out.println("Event Instance: " + event.getClass());
+                        System.out.printf("\n");
+                        System.out.printf("Event Instance: " + event.getClass() + "\n");
                         boolean askForPrompt = false;
                         if (event instanceof LocatableEvent)
                         {
-                            System.out.println("Location event hit on line " + line + "!");
+                            System.out.printf("Location event hit on line " + line + "!\n");
                             askForPrompt = true;
                         }
                         else if (event instanceof VMDisconnectEvent)
                         {
-                            System.out.println("Target VM has been disconnected!");
+                            System.out.printf("Target VM has been disconnected!\n");
                             break;
                         }
                         else if (event instanceof VMDeathEvent)
                         {
-                            System.out.println("Target VM is dead!");
+                            System.out.printf("Target VM is dead!\n");
                             break;
                         }
                         else
                         {
-                            System.out.println("Unknow event!");
+                            System.out.printf("Unknow event!\n");
                         }
                         EventRequest request = event.request();
                         if (request == null)
                             continue;
-                        System.out.println("Request Instance: " + request.getClass());
-                        System.out.println("Suspend Policy: " + request.suspendPolicy());
-                        System.out.print("\n");
+                        System.out.printf("Request Instance: " + request.getClass() + "\n");
+                        System.out.printf("Suspend Policy: " + request.suspendPolicy() + "\n");
+                        System.out.printf("\n");
                         if (!askForPrompt)
                             continue;
                         _LABELLED_BLOCK_USER_PROMPTING:
@@ -136,24 +136,24 @@ public class DebuggerAttach
                             ThreadReference thread = breakpointEvent.thread();
                             List<StackFrame> frames = thread.frames();
 
-                            System.out.print("\n");
-                            System.out.println("Code Index: " + stopLocation.codeIndex());
-                            System.out.println("Line number: " + stopLocation.lineNumber());
-                            System.out.println("Source Name: " + stopLocation.sourceName());
-                            System.out.println("Source Path: " + stopLocation.sourcePath());
-                            System.out.println("Reference: " + stopLocation.declaringType().name());
-                            System.out.println("Method: " + stopLocation.method().name());
-                            System.out.println("Frame: " + thread.frameCount());
-                            System.out.print("\n");
-                            System.out.println("Method Variables (only supports java.lang.Long type): ");
+                            System.out.printf("\n");
+                            System.out.printf("Code Index: " + stopLocation.codeIndex() + "\n");
+                            System.out.printf("Line number: " + stopLocation.lineNumber() + "\n");
+                            System.out.printf("Source Name: " + stopLocation.sourceName() + "\n");
+                            System.out.printf("Source Path: " + stopLocation.sourcePath() + "\n");
+                            System.out.printf("Reference: " + stopLocation.declaringType().name() + "\n");
+                            System.out.printf("Method: " + stopLocation.method().name() + "\n");
+                            System.out.printf("Frame: " + thread.frameCount() + "\n");
+                            System.out.printf("\n");
+                            System.out.printf("Method Variables (only supports java.lang.Long type): \n");
                             for (LocalVariable variable : variables)
                             {
                                 Type type = variable.type();
                                 if (type instanceof LongType)
                                     System.out.printf("%s %s = %s\n", variable.typeName(), variable.name());
                             }
-                            System.out.print("\n");
-                            System.out.println("Frame Variables (only supports java.lang.Long type): ");
+                            System.out.printf("\n");
+                            System.out.printf("Frame Variables (only supports java.lang.Long type): \n");
                             for (int i = 1; i <= frames.size(); i++)
                             {
                                 System.out.printf("\n============== FRAME %d ==============\n", i);
@@ -175,8 +175,8 @@ public class DebuggerAttach
                                 }
                                 System.out.printf("\n============== FRAME %d ==============\n", i);
                             }
-                            System.out.print("\n");
-                            System.out.print("\nWhat would you like to do? (resume/step/exit) ");
+                            System.out.printf("\n");
+                            System.out.printf("\nWhat would you like to do? (resume/step/exit) ");
                             String input = _SCANNER.next();
                             switch (input)
                             {

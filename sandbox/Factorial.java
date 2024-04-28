@@ -8,21 +8,21 @@ public class Factorial
         Scanner scanner = new Scanner(System.in);
         while (true)
         {
-            System.out.print("Give me an integer to do factorial: ");
+            System.out.printf("Give me an integer to do factorial: ");
             long input = scanner.nextInt();
             if (input == -99)
             {
-                System.out.println("\nNothing to do here, exiting the program...");
+                System.out.printf("\nNothing to do here, exiting the program...\n");
                 return;
             }
-            System.out.println("\n========== START ==========\n");
-            System.out.println(String.format("Calculating factorial of %d:\n", input));
+            System.out.printf("\n========== START ==========\n\n");
+            System.out.printf("Calculating factorial of %d:\n\n", input);
             if (input < 0)
-                System.out.println(String.format("Cannot calculate factorial of %d since it is a negative number!", input));
+                System.out.printf("Cannot calculate factorial of %d since it is a negative number!\n", input);
             else if (input == 0)
-                System.out.println(String.format("Everybody knows 0! = 1"));
+                System.out.printf("Everybody knows 0! = 1\n");
             else if (input == 1)
-                System.out.println(String.format("Everybody knows 1! = 1"));
+                System.out.printf("Everybody knows 1! = 1\n");
             else
             {
                 long result = 1;
@@ -33,9 +33,9 @@ public class Factorial
                     builder.append(i + " x ");
                 }
                 builder.append("1 = " + BigDecimal.valueOf(result));
-                System.out.println(builder);
+                System.out.printf(builder + "\n");
             }
-            System.out.println("\n========== DONE ===========\n");
+            System.out.printf("\n========== DONE ===========\n\n");
         }
     }
 }
