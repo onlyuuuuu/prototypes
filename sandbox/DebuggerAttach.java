@@ -1,7 +1,9 @@
 import com.sun.jdi.*;
 import com.sun.jdi.connect.AttachingConnector;
 import com.sun.jdi.connect.Connector;
+import com.sun.jdi.event.*;
 import com.sun.jdi.request.BreakpointRequest;
+import com.sun.jdi.request.EventRequest;
 import com.sun.jdi.request.EventRequestManager;
 
 import java.util.Map;
@@ -55,24 +57,66 @@ public class DebuggerAttach
             int stop = 1;
             while (stop != 0)
             {
-                System.out.print("Which line would you like to set a breakpoint: ");
+                System.out.print("\nWhich line would you like to set a breakpoint: ");
                 int line = _SCANNER.nextInt();
 
-                ReferenceType referenceType = virtualMachine.classesByName("Factorial").getFirst();
-                Location location = referenceType.locationsOfLine(line).getFirst();
-
                 EventRequestManager eventRequestManager = virtualMachine.eventRequestManager();
-                BreakpointRequest breakpointRequest = eventRequestManager.createBreakpointRequest(location);
-                breakpointRequest.enable();
+                ReferenceType referenceType = virtualMachine.classesByName("Factorial").getFirst();
+                for (Location location : referenceType.locationsOfLine(line))
+                {
+                    BreakpointRequest breakpointRequest = eventRequestManager.createBreakpointRequest(location);
+                    breakpointRequest.enable();
+                }
 
-                // Try sleeping for 10 seconds
-                Thread.sleep(10l * 1000l);
+                EventQueue eventQueue = virtualMachine.eventQueue();
+                EventSet events = eventQueue.remove();
+
+                for (Event event : events)
+                {
+                    System.out.print("\n");
+                    System.out.println("Event Instance: " + event.getClass());
+                    boolean askForPrompt = false;
+                    if (event instanceof BreakpointEvent)
+                    {
+                        System.out.println("Breakpoint hit on line " + line + "!");
+                        askForPrompt = true;
+                    }
+                    else if (event instanceof VMDisconnectEvent)
+                    {
+                        System.out.println("Target VM has been disconnected!");
+                        break;
+                    }
+                    else if (event instanceof VMDeathEvent)
+                    {
+                        System.out.println("Target VM is dead!");
+                        break;
+                    }
+                    else
+                    {
+                        System.out.println("Unknow event!");
+                        break;
+                    }
+                    EventRequest request = event.request();
+                    if (request == null)
+                        continue;
+                    System.out.println("Request Instance: " + request.getClass());
+                    System.out.println("Suspend Policy: " + request.suspendPolicy());
+                    System.out.print("\n");
+                    if (!askForPrompt)
+                        continue;
+                    while (true)
+                    {
+                        System.out.print("\nWhat would you like to know? ");
+                        String input = _SCANNER.next();
+                        if ("nothing".equalsIgnoreCase(input))
+                            break;
+                        BreakpointEvent breakpointEvent = (BreakpointEvent) event;
+                    }
+                }
 
                 // Continue executions
                 virtualMachine.resume();
 
-                // Remove the breakpoint
-                breakpointRequest.disable();
                 eventRequestManager.deleteAllBreakpoints();
 
                 System.out.print("Type 0 to exit: ");
