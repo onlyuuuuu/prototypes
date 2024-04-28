@@ -5,11 +5,9 @@ import com.sun.jdi.event.*;
 import com.sun.jdi.request.BreakpointRequest;
 import com.sun.jdi.request.EventRequest;
 import com.sun.jdi.request.EventRequestManager;
+import com.sun.jdi.request.StepRequest;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class DebuggerAttach
 {
@@ -57,8 +55,10 @@ public class DebuggerAttach
             System.out.printf("\n");
             System.out.printf("\n============ INFO ============\n");
 
-            // Eyes on target, please continue executions
-            virtualMachine.resume();
+            EventRequestManager eventRequestManager = virtualMachine.eventRequestManager();
+            ReferenceType referenceType = virtualMachine.classesByName("Factorial").getFirst();
+
+            Map<String, StepRequest> stepEnabledThreads = new TreeMap<>();
 
             int stop = 1;
             while (stop != 0)
@@ -66,8 +66,6 @@ public class DebuggerAttach
                 System.out.printf("\nWhich line would you like to set a breakpoint (either 23 or 33 is recommended): ");
                 int line = _SCANNER.nextInt();
 
-                EventRequestManager eventRequestManager = virtualMachine.eventRequestManager();
-                ReferenceType referenceType = virtualMachine.classesByName("Factorial").getFirst();
                 for (Location location : referenceType.locationsOfLine(line))
                 {
                     BreakpointRequest breakpointRequest = eventRequestManager.createBreakpointRequest(location);
@@ -120,9 +118,9 @@ public class DebuggerAttach
                         _LABELLED_BLOCK_USER_PROMPTING:
                         while (true)
                         {
-                            LocatableEvent breakpointEvent = (LocatableEvent) event;
+                            LocatableEvent locatableEvent = (LocatableEvent) event;
 
-                            Location stopLocation = breakpointEvent.location();
+                            Location stopLocation = locatableEvent.location();
                             Method method = stopLocation.method();
                             List<LocalVariable> variables = Collections.emptyList();
                             try
@@ -133,7 +131,7 @@ public class DebuggerAttach
                                 System.err.printf("Method variables information is not available!\n");
                             }
 
-                            ThreadReference thread = breakpointEvent.thread();
+                            ThreadReference thread = locatableEvent.thread();
                             List<StackFrame> frames = thread.frames();
 
                             System.out.printf("\n");
@@ -176,12 +174,27 @@ public class DebuggerAttach
                                 System.out.printf("\n============== FRAME %d ==============\n", i);
                             }
                             System.out.printf("\n");
+
+                            // Enable step request
+                            if (!stepEnabledThreads.containsKey(thread.name()))
+                            {
+                                System.out.printf("\n%s has not been enabled with STEP request, enabling it now...\n", thread.name());
+                                StepRequest stepRequest = eventRequestManager.createStepRequest
+                                (
+                                    thread,
+                                    StepRequest.STEP_LINE,
+                                    StepRequest.STEP_OVER
+                                );
+                                stepRequest.enable();
+                                stepEnabledThreads.put(thread.name(), stepRequest);
+                                System.out.printf("\n%s has been enabled with STEP request!\n", thread.name());
+                            }
+
                             System.out.printf("\nWhat would you like to do? (resume/step/exit) ");
                             String input = _SCANNER.next();
                             switch (input)
                             {
                                 case "step":
-                                    // Step to next line
 
                                     break;
                                 case "exit":
