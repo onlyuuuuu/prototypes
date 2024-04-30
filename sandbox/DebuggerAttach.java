@@ -115,7 +115,6 @@ public class DebuggerAttach
                         System.out.printf("\n");
                         if (!askForPrompt)
                             continue;
-                        _LABELLED_BLOCK_USER_PROMPTING:
                         while (true)
                         {
                             LocatableEvent locatableEvent = (LocatableEvent) event;
@@ -143,18 +142,14 @@ public class DebuggerAttach
                             System.out.printf("Method: " + stopLocation.method().name() + "\n");
                             System.out.printf("Frame: " + thread.frameCount() + "\n");
                             System.out.printf("\n");
-                            System.out.printf("Method Variables (only supports java.lang.Long type): \n");
+                            System.out.printf("Method Variables: \n\n");
                             for (LocalVariable variable : variables)
-                            {
-                                Type type = variable.type();
-                                if (type instanceof LongType)
-                                    System.out.printf("%s %s = %s\n", variable.typeName(), variable.name());
-                            }
+                                System.out.printf("%s %s;\n", variable.typeName(), variable.name());
                             System.out.printf("\n");
                             System.out.printf("Frame Variables (only supports java.lang.Long type): \n");
                             for (int i = 1; i <= frames.size(); i++)
                             {
-                                System.out.printf("\n============== FRAME %d ==============\n", i);
+                                System.out.printf("\n============== FRAME %d ==============\n\n", i);
                                 StackFrame frame = frames.get(i - 1);
                                 try
                                 {
@@ -174,36 +169,26 @@ public class DebuggerAttach
                                 System.out.printf("\n============== FRAME %d ==============\n", i);
                             }
                             System.out.printf("\n");
-
-                            // Enable step request
-                            if (!stepEnabledThreads.containsKey(thread.name()))
-                            {
-                                System.out.printf("\n%s has not been enabled with STEP request, enabling it now...\n", thread.name());
-                                StepRequest stepRequest = eventRequestManager.createStepRequest
-                                (
-                                    thread,
-                                    StepRequest.STEP_LINE,
-                                    StepRequest.STEP_OVER
-                                );
-                                stepRequest.enable();
-                                stepEnabledThreads.put(thread.name(), stepRequest);
-                                System.out.printf("\n%s has been enabled with STEP request!\n", thread.name());
-                            }
-
-                            System.out.printf("\nWhat would you like to do? (resume/step/exit) ");
+                            System.out.printf("\nWhat would you like to do? resume (r) / step (s) / exit (e) ");
                             String input = _SCANNER.next();
-                            switch (input)
+                            switch (input.toLowerCase())
                             {
+                                case "s":
                                 case "step":
 
                                     break;
+                                case "e":
                                 case "exit":
                                     break _LABELLED_BLOCK_EVENT_POLLING;
+                                case "r":
                                 case "resume":
+                                    System.out.printf("\nResuming target VM, breakpoints are still on...\n");
+                                    virtualMachine.resume();
+                                    break;
                                 default:
                                     System.out.printf("\nResuming target VM, breakpoints are still on...\n");
                                     virtualMachine.resume();
-                                    break _LABELLED_BLOCK_USER_PROMPTING;
+                                    break;
                             }
                         }
                     }
@@ -211,7 +196,11 @@ public class DebuggerAttach
 
                 eventRequestManager.deleteAllBreakpoints();
 
-                System.out.printf("\nAll breakpoints have been cleared...\n");
+                System.out.printf("\nAll breakpoints have been cleared\n");
+
+                virtualMachine.resume();
+
+                System.out.printf("\nTarget VM has been resumed\n");
 
                 System.out.printf("\nType 0 to exit: ");
                 stop = _SCANNER.nextInt();
@@ -224,12 +213,13 @@ public class DebuggerAttach
             e.printStackTrace();
         } finally
         {
+            System.out.printf("\nCleaning up...\n");
             System.out.printf("\nResuming target VM...\n");
             virtualMachine.resume();
             System.out.printf("\nTarget VM resumed\n");
             System.out.printf("\nAttaching agent disconnecting...\n");
             virtualMachine.dispose();
-            System.out.printf("\nAttaching agent disconnected\n");
+            System.out.printf("\nAttaching agent disconnected\n\n");
         }
     }
 }

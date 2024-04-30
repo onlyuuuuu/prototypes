@@ -3,7 +3,7 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo "Location of [$(basename "${BASH_SOURCE[0]}")] is: $SCRIPT_DIR"
 
-javac Factorial.java
+javac -g Factorial.java
 jar --verbose --create --main-class Factorial --file factorial.jar Factorial.class
 target="-jar factorial.jar"
 if [[ ! -z "$1" && "$1" == "jar" ]]; then

@@ -12,7 +12,7 @@ public class Factorial
             long input = scanner.nextInt();
             if (input == -99)
             {
-                System.out.printf("\nNothing to do here, exiting the program...\n");
+                System.out.printf("\nNothing to do here, exiting the program...\n\n");
                 return;
             }
             System.out.printf("\n========== START ==========\n\n");
