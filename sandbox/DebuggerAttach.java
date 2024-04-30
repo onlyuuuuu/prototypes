@@ -131,6 +131,8 @@ public class DebuggerAttach
                             }
 
                             ThreadReference thread = locatableEvent.thread();
+                            // TODO: Investigate com.sun.jdi.IncompatibleThreadStateException
+                            // This might be caused by thread is waiting for user input (Scanner in Factorial.java) or reaching the end of the loop (line 33)
                             List<StackFrame> frames = thread.frames();
 
                             System.out.printf("\n");
@@ -184,6 +186,8 @@ public class DebuggerAttach
                                 case "resume":
                                     System.out.printf("\nResuming target VM, breakpoints are still on...\n");
                                     virtualMachine.resume();
+                                    // TODO: Investigate com.sun.jdi.IncompatibleThreadStateException
+                                    // This might be caused by thread is waiting for user input (Scanner in Factorial.java) or reaching the end of the loop (line 33)
                                     break;
                                 default:
                                     System.out.printf("\nResuming target VM, breakpoints are still on...\n");
