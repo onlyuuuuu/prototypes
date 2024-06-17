@@ -19,9 +19,13 @@ public class WebXmlFormatter
             String line = "";
             while ((line = reader.readLine()) != null)
             {
-                if (line.contains("<!-- JSPC servlet mappings start -->") ||
-                    line.contains("<!-- JSPC servlet mappings end -->") ||
-                    line.contains("<welcome-file-list>"))
+                if (line.contains("<!-- JSPC servlet mappings start -->"))
+                {
+                    buffer.append("\n");
+                    buffer.append("    " + line.trim() + "\n");
+                }
+                else if (line.contains("<!-- JSPC servlet mappings end -->") ||
+                         line.contains("<welcome-file-list>"))
                     buffer.append("    " + line.trim() + "\n");
                 else
                     buffer.append(line + "\n");

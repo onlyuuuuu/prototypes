@@ -17,12 +17,12 @@ repositories {
 
 dependencies {
     implementation("org.slf4j:slf4j-api:2.0.13")
-    implementation("ch.qos.logback:logback-classic:1.5.5")
-    implementation("ch.qos.logback:logback-core:1.5.5")
-    implementation("org.apache.tomcat:tomcat-jasper:11.0.0-M18")
-    implementation("org.apache.tomcat:tomcat-jasper-el:11.0.0-M18")
-    implementation("jakarta.servlet:jakarta.servlet-api:6.1.0-M2")
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("ch.qos.logback:logback-core:1.5.6")
+    implementation("org.apache.tomcat:tomcat-jasper:11.0.0-M20")
+    implementation("org.apache.tomcat:tomcat-jasper-el:11.0.0-M20")
+    implementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
+    testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
